@@ -1,0 +1,14 @@
+model:
+  name: "PretrainedResNet13"
+  num_classes: 2
+
+data:
+  train_path: "./dataset/prototyping/train"
+  valid_path: "./dataset/prototyping/valid"
+  test_path: "./dataset/prototyping/valid"
+  num_workers: 2
+
+training:
+  epochs: 100
+  batch_size: 32
+  learning_rate: 0.001
