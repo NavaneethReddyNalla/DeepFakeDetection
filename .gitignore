@@ -1,2 +1,6 @@
+# Folders created for setup
 .venv/
+.idea/
+dataset/
+
 *.pt
