@@ -3,4 +3,5 @@
 .idea/
 dataset/
 
+# Model Checkpoints are ignored
 *.pt
