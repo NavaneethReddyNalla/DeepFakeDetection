@@ -12,3 +12,5 @@ training:
   epochs: 100
   batch_size: 32
   learning_rate: 0.001
+
+random_seed: 46
