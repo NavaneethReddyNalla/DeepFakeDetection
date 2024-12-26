@@ -3,5 +3,11 @@
 .idea/
 dataset/
 
+# Lightning Folders
+lightning_logs/
+
+# Cache
+__pycache__/
+
 # Model Checkpoints are ignored
 *.pt

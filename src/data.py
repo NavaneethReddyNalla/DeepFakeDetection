@@ -1,6 +1,5 @@
-import yaml
 import os
-import pytorch_lightning as pl
+import lightning as pl
 import torch
 
 from pytorch_lightning.utilities.types import TRAIN_DATALOADERS, EVAL_DATALOADERS
@@ -10,11 +9,12 @@ from torch.utils.data import DataLoader
 
 
 class DeepFakeDataModule(pl.LightningDataModule):
-    def __init__(self, data_dir:str = "", batch_size: int = 32, valid_set_eq_test_set: bool = False):
+    def __init__(self, train_dir:str, valid_dir:str, test_dir:str, batch_size: int = 32):
         super(DeepFakeDataModule, self).__init__()
-        self.data_dir = data_dir
+        self.train_dir = train_dir
+        self.valid_dir = valid_dir
+        self.test_dir = test_dir
         self.batch_size = batch_size
-        self.valid_eq_test_set = valid_set_eq_test_set
         self.train_set = None
         self.valid_set = None
         self.test_set = None
@@ -24,18 +24,16 @@ class DeepFakeDataModule(pl.LightningDataModule):
             v2.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
         ])
 
-    def setup(self, stage: str):
-        test_path = "test" if not self.valid_eq_test_set else "valid"
-
+    def setup(self, stage: str = None):
         if stage == "fit" or stage is None:
-            self.train_set = ImageFolder(os.path.join(self.data_dir, "train"), self.transforms)
-            self.valid_set = ImageFolder(os.path.join(self.data_dir, "valid"), self.transforms)
+            self.train_set = ImageFolder(self.train_dir, self.transforms)
+            self.valid_set = ImageFolder( self.valid_dir, self.transforms)
 
         if stage == "test" or stage is None:
-            self.test_set = ImageFolder(os.path.join(self.data_dir, test_path), self.transforms)
+            self.test_set = ImageFolder( self.test_dir, self.transforms)
 
     def train_dataloader(self) -> TRAIN_DATALOADERS:
-        return DataLoader(self.train_set, batch_size=self.batch_size)
+        return DataLoader(self.train_set, batch_size=self.batch_size, shuffle=True)
 
     def val_dataloader(self) -> EVAL_DATALOADERS:
         return DataLoader(self.valid_set, batch_size=self.batch_size)
